@@ -1,0 +1,26 @@
+service: product
+frameworkVersion: "3"
+plugins:
+  - serverless-webpack
+package:
+    individually: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  httpApi:
+    cors: true
+
+functions:
+  getProductsList:
+    handler: list.getProductsList
+    events:
+      - httpApi: 
+          method: 'GET'
+          path:  '/products'
+  getProductsById:
+    handler: byid.getProductsById
+    events:
+      - httpApi: 
+          method: 'GET'
+          path:  '/products/{param}'
