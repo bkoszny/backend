@@ -3,15 +3,33 @@ frameworkVersion: "3"
 plugins:
   - serverless-webpack
 package:
-    individually: true
+  individually: true
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource: "arn:aws:dynamodb:*:*:table/*"
+  environment:
+    TABLE_PRODUCTS: 'products'
+    TABLE_STOCKS: 'stocks'
   httpApi:
     cors: true
 
+custom:
+  webpack:
+    includeModules: false
+    
 functions:
+  createProduct:
+    handler: create.createProduct
+    events:
+      - httpApi: 
+          method: 'POST'
+          path:  '/products'
   getProductsList:
     handler: list.getProductsList
     events:

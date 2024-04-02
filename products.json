@@ -1,0 +1,44 @@
+{
+    "products": [
+      {
+        "PutRequest": {
+          "Item": {
+            "description": {"S": "Yarlington Mill apple tree 2 years"},
+            "id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80aa"},
+            "price": {"N": "24"},
+            "title": {"S": "Yarlington Mill 2 yrs"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "description": {"S": "Dabinett apple tree 2 years"},
+            "id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80a1"},
+            "price": {"N": "24"},
+            "title": {"S": "Dabinett 2 yrs"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "description": {"S": "Yarlington Mill apple tree 1 years"},
+            "id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80a3"},
+            "price": {"N": "15"},
+            "title": {"S": "Yarlington Mill 1 yrs"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "description": {"S": "Dabinett apple tree 1 years"},
+            "id": {"S": "7567ec4b-b10c-48c5-9345-fc73348a80a4"},
+            "price": {"N": "15"},
+            "title": {"S": "Dabinett 1 yrs"}
+          }
+        }
+      }
+    ]
+  }
