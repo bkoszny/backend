@@ -1,0 +1,33 @@
+service: import
+plugins:
+  - serverless-webpack
+package:
+  individually: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::import-123456/*"
+  httpApi:
+    cors: true
+
+functions:
+  importProductsFile:
+    handler: import.importProductsFile
+    events:
+      - httpApi: 
+          method: 'GET'
+          path:  '/import'
+  importFileParser:
+    handler: import.importFileParser
+    events:
+      - s3:
+          bucket: import-123456
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
