@@ -1,0 +1,36 @@
+{
+    "stocks": [
+      {
+        "PutRequest": {
+          "Item": {
+            "product_id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80aa"},
+            "count": {"N": "214"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "product_id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80a1"},
+            "count": {"N": "324"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "product_id": {"S": "7567ec4b-b10c-48c5-9345-fc73c48a80a3"},
+            "count": {"N": "135"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "product_id": {"S": "7567ec4b-b10c-48c5-9345-fc73348a80a4"},
+            "count": {"N": "135"}
+          }
+        }
+      }
+    ]
+  }
