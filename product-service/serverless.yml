@@ -13,17 +13,56 @@ provider:
       Action:
         - "dynamodb:*"
       Resource: "arn:aws:dynamodb:*:*:table/*"
+    - Effect: Allow
+      Action:
+        - sns:ListTopics
+        - sns:Publish
+      Resource: "*"
   environment:
     TABLE_PRODUCTS: 'products'
     TABLE_STOCKS: 'stocks'
   httpApi:
     cors: true
 
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt DLQueue.Arn
+          maxReceiveCount: 2
+    DLQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: DLQueue
+        MessageRetentionPeriod: 86400
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: createProductTopic
+        TopicName: createProductTopic
+    EmailSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+        Endpoint: trelejaan@interia.pl
+
 custom:
   webpack:
     includeModules: false
     
 functions:
+  catalogBatchProcess:
+    handler: process.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt: [ catalogItemsQueue, Arn ]
   createProduct:
     handler: create.createProduct
     events:
