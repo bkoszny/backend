@@ -1,0 +1,14 @@
+service: authorization
+frameworkVersion: "3"
+plugins:
+  - serverless-webpack
+  - serverless-dotenv-plugin
+package:
+  individually: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+
+functions:
+  basicAuthorizer:
+    handler: authorizer.basicAuthorizer

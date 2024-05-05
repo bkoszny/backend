@@ -24,7 +24,16 @@
         }
       ],
       "httpApi": {
-        "cors": true
+        "cors": true,
+        "authorizers": {
+          "customAuthorizer": {
+            "name": "customAuthorizer",
+            "type": "request",
+            "functionArn": "arn:aws:lambda:us-east-1:851725557379:function:authorization-dev-basicAuthorizer",
+            "enableSimpleResponses": true,
+            "payloadVersion": "2.0"
+          }
+        }
       },
       "stage": "dev",
       "region": "us-east-1",
@@ -205,7 +214,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import/dev/1713703627833-2024-04-21T12:47:07.833Z/importProductsFile.zip"
+                "S3Key": "serverless/import/dev/1714923340493-2024-05-05T15:35:40.493Z/importProductsFile.zip"
               },
               "Handler": "import.importProductsFile",
               "Runtime": "nodejs16.x",
@@ -230,7 +239,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import/dev/1713703627833-2024-04-21T12:47:07.833Z/importFileParser.zip"
+                "S3Key": "serverless/import/dev/1714923340493-2024-05-05T15:35:40.493Z/importFileParser.zip"
               },
               "Handler": "import.importFileParser",
               "Runtime": "nodejs16.x",
@@ -392,7 +401,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import/dev/1713703627833-2024-04-21T12:47:07.833Z/custom-resources.zip"
+                "S3Key": "serverless/import/dev/1714923340493-2024-05-05T15:35:40.493Z/custom-resources.zip"
               },
               "FunctionName": "import-dev-custom-resource-existing-s3",
               "Handler": "s3/handler.handler",
@@ -445,6 +454,69 @@
               "AutoDeploy": true,
               "DefaultRouteSettings": {
                 "DetailedMetricsEnabled": false
+              }
+            }
+          },
+          "CustomAuthorizerLambdaAuthorizerPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": "arn:aws:lambda:us-east-1:851725557379:function:authorization-dev-basicAuthorizer",
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiAuthorizerCustomAuthorizer": {
+            "Type": "AWS::ApiGatewayV2::Authorizer",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "Name": "customAuthorizer",
+              "IdentitySource": [],
+              "AuthorizerType": "REQUEST",
+              "EnableSimpleResponses": true,
+              "AuthorizerPayloadFormatVersion": "2.0",
+              "AuthorizerUri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    "arn:aws:lambda:us-east-1:851725557379:function:authorization-dev-basicAuthorizer",
+                    "/invocations"
+                  ]
+                ]
               }
             }
           },
@@ -516,6 +588,10 @@
                     }
                   ]
                 ]
+              },
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "HttpApiAuthorizerCustomAuthorizer"
               }
             },
             "DependsOn": "HttpApiIntegrationImportProductsFile"
@@ -679,7 +755,10 @@
           {
             "httpApi": {
               "method": "GET",
-              "path": "/import"
+              "path": "/import",
+              "authorizer": {
+                "name": "customAuthorizer"
+              }
             },
             "resolvedMethod": "GET",
             "resolvedPath": "/import"
@@ -732,7 +811,7 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/import/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/import/dev/1713703627833-2024-04-21T12:47:07.833Z"
+        "artifactDirectoryName": "serverless/import/dev/1714923340493-2024-05-05T15:35:40.493Z"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -746,7 +825,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/import/dev/1713703627833-2024-04-21T12:47:07.833Z",
+    "artifactDirectoryName": "serverless/import/dev/1714923340493-2024-05-05T15:35:40.493Z",
     "artifact": ""
   }
 }
