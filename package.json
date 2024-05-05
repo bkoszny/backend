@@ -3,6 +3,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "serverless": "^3.38.0"
   },
   "devDependencies": {
