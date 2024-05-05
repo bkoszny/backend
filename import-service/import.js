@@ -46,8 +46,15 @@ export const importFileParser = async (event) => {
     };
     const s3ObjectStream = s3.getObject(params).createReadStream();
 
-    s3ObjectStream.pipe(csv()).on('data', (chunk) => {
-        console.log(`===> ${JSON.stringify(chunk)}`);
+    const sqs = new AWS.SQS({ region: 'us-east-1' });
+    const sqsUrl = 'https://sqs.us-east-1.amazonaws.com/851725557379/catalogItemsQueue';
+    s3ObjectStream.pipe(csv()).on('data', async (chunk) => {
+        // console.log(`===> ${JSON.stringify(chunk)}`);
+        await sqs.sendMessage({
+            QueueUrl: sqsUrl,
+            MessageBody: JSON.stringify(chunk),
+            MessageAttributes: {}
+        }).promise();
     });
 
     await new Promise((res) => {

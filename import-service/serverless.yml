@@ -12,6 +12,10 @@ provider:
         - "s3:*"
       Resource:
         - "arn:aws:s3:::import-123456/*"
+    - Effect: "Allow"
+      Action:
+        - "sqs:SendMessage"
+      Resource: "arn:aws:sqs:us-east-1:851725557379:catalogItemsQueue"
   httpApi:
     cors: true
 
