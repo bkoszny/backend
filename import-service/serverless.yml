@@ -18,6 +18,13 @@ provider:
       Resource: "arn:aws:sqs:us-east-1:851725557379:catalogItemsQueue"
   httpApi:
     cors: true
+    authorizers:
+      customAuthorizer:
+        name: 'customAuthorizer'
+        type: 'request'
+        functionArn: arn:aws:lambda:us-east-1:851725557379:function:authorization-dev-basicAuthorizer
+        enableSimpleResponses: true
+        payloadVersion: '2.0'
 
 functions:
   importProductsFile:
@@ -26,6 +33,9 @@ functions:
       - httpApi: 
           method: 'GET'
           path:  '/import'
+          authorizer: 
+            name: customAuthorizer
+          
   importFileParser:
     handler: import.importFileParser
     events:
